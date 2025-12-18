@@ -1,45 +1,48 @@
 pipeline {
     agent any
 
+    triggers {
+        githubPush()   
+    }
+//test for github webhook trigger
     stages {
-        stage('Install') {
+
+        stage('push') {
             steps {
-                echo 'Installing dependencies...'
-                sh 'npm install'
+                git branch: 'main', url: 'https://github.com/Gazelle2022/tp_angular_jenkins.git'
             }
         }
 
-        stage('Build') {
+        stage('build') {
             steps {
-                echo 'Building Angular app...'
-                sh 'ng build --prod'
+                bat 'npm install'
+                bat 'ng build --prod'
             }
         }
-
-        stage('Test') {
+        stage('test') {
             steps {
-                echo 'Running tests...'
-                sh 'ng test --watch=false --browsers=ChromeHeadless || true'
+                bat 'ng test --watch=false --browsers=ChromeHeadless'
             }
         }
-
-        stage('Deploy') {
+        stage('deploy') {
             steps {
                 echo 'Deploying application...'
-                // Ajouter ici tes commandes de déploiement
+                // Add your deployment commands here
             }
         }
     }
-
     post {
         always {
-            echo 'This always runs after the stages.'
+            echo 'This will always run after the stages.'
         }
         success {
-            echo 'Pipeline succeeded!'
+            echo 'The pipeline succeeded!'
         }
         failure {
-            echo 'Pipeline failed.'
+            echo 'The pipeline failed.'
         }
     }
 }
+
+
+
