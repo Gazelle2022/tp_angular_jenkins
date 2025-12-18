@@ -4,7 +4,7 @@ pipeline {
     triggers {
         githubPush()   
     }
-//test for github webhook
+//test for github webhook trigger
     stages {
 
         stage('push') {
